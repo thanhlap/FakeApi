@@ -25,15 +25,18 @@ const authRoute = require("./routes/auth");
 //middleware
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "/public")));
+
+// Static Files
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//view engine
-app.set("view engine", "ejs");
-app.set("views", "views");
 
+//view engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.disable("view cache");
+
 
 app.use("/", homeRoute);
 app.use("/products", productRoute);
