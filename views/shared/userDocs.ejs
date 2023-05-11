@@ -1,0 +1,454 @@
+<h2 class="heading margin-top-md" id="user">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather feather-user"
+  >
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+  Users
+</h2>
+<h3 id="u-all">Get all users</h3>
+<pre><code>fetch(<span class="c-api">'http://localhost:6400/users'</span>)
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+    [
+        {
+            id:1,
+            email:'John@gmail.com',
+            username:'johnd',
+            password:'m38rmF$',
+            name:{
+                firstname:'John',
+                lastname:'Doe'
+            },
+            address:{
+                city:'kilcoole',
+                street:'7835 new road',
+                number:3,
+                zipcode:'12926-3874',
+                geolocation:{
+                    lat:'-37.3159',
+                    long:'81.1496'
+                }
+            },
+            phone:'1-570-236-7033'
+        },
+        <span class="c-comment">/*...*/</span>
+        {
+            id:20,
+            email:'...',
+            username:'...',
+            password:'...',
+            name:{
+                firstname:'...',
+                lastname:'...'
+            },
+            address:{
+                city:'...',
+                street:'...',
+                number:...,
+                zipcode:'...',
+                geolocation:{
+                    lat:'...',
+                    long:'...'
+                }
+            },
+            phone:'...'
+        }
+    ]
+        </code></pre>
+
+<h3 id="u-single">Get a single user</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users/1'</span>)
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+            {
+                id:1,
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+            }
+        </code></pre>
+
+<h3 id="u-limit">Limit results</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users?limit=5'</span>)
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+            [
+            {
+                id:1,
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+            },
+            <span class="c-comment">/*...*/</span>
+            {
+                id:5,
+                email:'...',
+                username:'...',
+                password:'...',
+                name:{
+                    firstname:'...',
+                    lastname:'...'
+                },
+                address:{
+                    city:'...',
+                    street:'...',
+                    number:...,
+                    zipcode:'...',
+                    geolocation:{
+                        lat:'...',
+                        long:'...'
+                    }
+                },
+                phone:'...'
+            }
+        ]
+        </code></pre>
+
+<h3 id="u-sort">Sort results</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users?sort=desc'</span>)
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<p>
+  <span class="tips">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-zap"
+    >
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    </svg>
+  </span>
+  Giá trị mặc định ở chế độ tăng dần, bạn có thể sử dụng nó với 'desc' hoặc
+  'asc' tùy ý.
+</p>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+        [
+            {
+                id:20,
+                email:'...',
+                username:'...',
+                password:'...',
+                name:{
+                    firstname:'...',
+                    lastname:'...'
+                },
+                address:{
+                    city:'...',
+                    street:'...',
+                    number:...,
+                    zipcode:'...',
+                    geolocation:{
+                        lat:'...',
+                        long:'...'
+                    }
+                },
+                phone:'...'
+            },
+            <span class="c-comment">/*...*/</span>
+            {
+                id:1,
+                email:'...',
+                username:'...',
+                password:'...',
+                name:{
+                    firstname:'...',
+                    lastname:'...'
+                },
+                address:{
+                    city:'...',
+                    street:'...',
+                    number:...,
+                    zipcode:'...',
+                    geolocation:{
+                        lat:'...',
+                        long:'...'
+                    }
+                },
+                phone:'...'
+            }
+        ]
+        </code></pre>
+
+<h3 id="u-new">Add a new user</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users'</span>,{
+            method:"POST",
+            body:JSON.stringify(
+                {
+                    email:'John@gmail.com',
+                    username:'johnd',
+                    password:'m38rmF$',
+                    name:{
+                        firstname:'John',
+                        lastname:'Doe'
+                    },
+                    address:{
+                        city:'kilcoole',
+                        street:'7835 new road',
+                        number:3,
+                        zipcode:'12926-3874',
+                        geolocation:{
+                            lat:'-37.3159',
+                            long:'81.1496'
+                        }
+                    },
+                    phone:'1-570-236-7033'
+                }
+            )
+        })
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<p>
+  <span class="tips">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-zap"
+    >
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    </svg> </span
+  >Nếu bạn gửi một đối tượng như đoạn mã trên, nó sẽ trả lại cho bạn một đối
+  tượng có id mới. hãy nhớ rằng không có gì trong thực tế sẽ chèn vào cơ sở dữ
+  liệu. vì vậy nếu bạn muốn truy cập id mới, bạn sẽ gặp lỗi 404.
+</p>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+            {
+                id:21,
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+            }
+        </code></pre>
+
+<h3 id="u-update">Update a users</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users/7'</span>,{
+            method:"PUT",
+            body:JSON.stringify(
+                {
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+                }
+            )
+        })
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users/7'</span>,{
+                method:"PATCH",
+                body:JSON.stringify(
+                    {
+                        email:'John@gmail.com',
+                        username:'johnd',
+                        password:'m38rmF$',
+                        name:{
+                            firstname:'John',
+                            lastname:'Doe'
+                        },
+                        address:{
+                            city:'kilcoole',
+                            street:'7835 new road',
+                            number:3,
+                            zipcode:'12926-3874',
+                            geolocation:{
+                                lat:'-37.3159',
+                                long:'81.1496'
+                            }
+                        },
+                        phone:'1-570-236-7033'
+                    }
+                )
+            })
+                .then(res=>res.json())
+                .then(json=>console.log(json))</code></pre>
+<p>
+  <span class="tips">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-zap"
+    >
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    </svg> </span
+  >Nó sẽ trả lại cho bạn một đối tượng có id đã gửi. hãy nhớ rằng không có gì
+  trong thực tế sẽ cập nhật trong cơ sở dữ liệu.
+</p>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+            {
+                id:7,
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+            }
+        </code></pre>
+
+<h3 id="u-delete">Delete a user</h3>
+<pre><code>fetch('<span class="c-api">http://localhost:6400/users/6'</span>,{
+            method:"DELETE"
+        })
+            .then(res=>res.json())
+            .then(json=>console.log(json))</code></pre>
+<p>
+  <span class="tips">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-zap"
+    >
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+    </svg> </span
+  >Người dùng sẽ không bị xóa trên cơ sở dữ liệu. nhưng nếu bạn đã gửi dữ liệu
+  thành công, nó sẽ trả lại cho bạn người dùng đã xóa giả mạo.
+</p>
+<button class="show-output btn btn-outline">Show output</button>
+<pre class="output-result"><code>
+            <span class="c-comment">//output</span>
+            {
+                id:6,
+                email:'John@gmail.com',
+                username:'johnd',
+                password:'m38rmF$',
+                name:{
+                    firstname:'John',
+                    lastname:'Doe'
+                },
+                address:{
+                    city:'kilcoole',
+                    street:'7835 new road',
+                    number:3,
+                    zipcode:'12926-3874',
+                    geolocation:{
+                        lat:'-37.3159',
+                        long:'81.1496'
+                    }
+                },
+                phone:'1-570-236-7033'
+            }
+        </code></pre>

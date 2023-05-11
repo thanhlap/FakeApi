@@ -1,0 +1,39 @@
+<%- include("../shared/header.ejs") %>
+
+<section class="row">
+  <div class="col-md-6 intro">
+    <h2 class="heading">Làm thế nào để sử dụng nó?</h2>
+    <p>
+      fakeStoreApi có thể được sử dụng với bất kỳ loại dự án mua sắm nào cần sản
+      phẩm, giỏ hàng và người dùng ở định dạng JSON. bạn có thể sử dụng các ví
+      dụ bên dưới để kiểm tra cách fakeStoreApi hoạt động và thoải mái tận hưởng
+      nó trong các dự án tuyệt vời của bạn!
+    </p>
+  </div>
+</section>
+
+<section class="row">
+  <aside class="col-md-2 hidden-xs">
+    <%- include("../shared/aside.ejs") %>
+  </aside>
+
+  <div class="col-md-12 code-area">
+    <%- include("../shared/productDocs.ejs") %> <%-
+    include("../shared/cartDocs.ejs") %> <%- include("../shared/userDocs.ejs")
+    %> <%- include("../shared/authDocs.ejs") %>
+  </div>
+</section>
+<script>
+  let show_btns = document.querySelectorAll(".show-output");
+  Array.from(show_btns).forEach((element) => {
+    element.addEventListener("click", function () {
+      element.nextElementSibling.classList.toggle("block");
+      if (element.nextElementSibling.classList.contains("block")) {
+        element.textContent = "Hide output";
+      } else {
+        element.textContent = "Show output";
+      }
+    });
+  });
+</script>
+<%- include("../shared/footer.ejs") %>
