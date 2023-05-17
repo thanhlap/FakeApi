@@ -1,66 +1,42 @@
 //initializes
 const express = require("express");
 const app = express();
+const viewEngine = require("./config/viewEngine");
+const initWebRoutes = require("./routes/web");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
-const myEnv = dotenv.config();
-dotenvExpand.expand(myEnv);
+dotenv.config();
 
 
-
-//port
-const port = 6400;
-
-//routes
-const productRoute = require("./routes/product");
-const homeRoute = require("./routes/home");
-const cartRoute = require("./routes/cart");
-const userRoute = require("./routes/user");
-const authRoute = require("./routes/auth");
 
 //middleware
 app.use(cors());
-
-
-// Static Files
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 //view engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.disable("view cache");
+viewEngine(app);
+//routes
+initWebRoutes(app);
+
+// Page Error
+app.get("*", (req, res) => {
+  res.send("Nhập Sai Đường Dẫn! Vui Lòng Nhập Lại >.<")
+});
 
 
-app.use("/", homeRoute);
-app.use("/products", productRoute);
-app.use("/carts", cartRoute);
-app.use("/users", userRoute);
-app.use("/auth", authRoute);
+//kết nối đb
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Kết nối database thành công!"))
+  .catch((err) => {
+    console.log(err);
+  });
 
-
-
-try {
-  //mongoose
-  mongoose.set('useFindAndModify', false);
-  mongoose.set('useUnifiedTopology', true);
-  mongoose
-    .connect(process.env.DATABASE_URL, { useNewUrlParser: true })
-    .then(() => {
-      app.listen(port, () => {
-        console.log(`Kết nối thành công với post: ${port}`);
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-} catch (error) { console.log({ error }) }
-
+const PORT = process.env.PORT || 6400
+app.listen(PORT, () => {
+  console.log('Server is running on port:', PORT)
+})
 
 module.exports = app;
