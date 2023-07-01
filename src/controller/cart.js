@@ -2,22 +2,58 @@ const Cart = require('../model/cart')
 
 //Get all carts,Limit results,Sort results,Get carts in a date range
 module.exports.getAllCarts = async (req, res) => {
-  const limit = Number(req.query.limit) || 0
-  const sort = req.query.sort == "desc" ? -1 : 1
-  const startDate = req.query.startdate || new Date('1970-01-01')
-  const endDate = req.query.enddate || new Date()
-
   try {
-    const carts = await Cart.find({ date: { $gte: new Date(startDate), $lt: new Date(endDate) } })
-      .select('-_id -products._id')
-      .limit(limit)
-      .sort({ id: sort })
+    const startDate = req.query.startdate || new Date('1970-01-01')
+    const endDate = req.query.enddate || new Date()
+    const fields = req.query.fields ? req.query.fields.split(',').join(' ') : "";
+    const sort = req.query.sort ? req.query.sort.split(',').join(' ') : "DESC";
 
-    return res.status(200).json({
-      status: true,
-      massege: "Hiển thị danh sách thành công",
-      carts
-    });
+    const limit = +req.query.limit || 0 //số records hiển thị trên mỗi trang
+    var page = +req.query.page || 0 //trang hiện tại
+
+
+    const total_records = await Cart.countDocuments(); //tổng số records
+    const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
+
+    //kiểm tra page nhập âm hoặc lơn hơn tổng page
+    if (page < 0) page = 1
+    if (page > total_page) page = total_page;
+    const start = +((page - 1) * limit) || 0 //loại bỏ số phần tử trước của page hiện tại
+
+    //limit and skip
+    if (page && limit) {
+      let carts = await Cart.find({ date: { $gte: new Date(startDate), $lt: new Date(endDate) } })
+        .select(fields)
+        .sort({ id: sort })
+        .skip(start)
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        carts
+      });
+
+    } else {
+      let carts = await Cart.find({ date: { $gte: new Date(startDate), $lt: new Date(endDate) } })
+        .select(fields)
+        .sort({ id: sort })
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        carts
+      });
+    }
 
   } catch (error) {
     console.log(error)

@@ -2,20 +2,80 @@ const User = require('../model/user')
 
 //get all users
 module.exports.getAllUser = async (req, res) => {
-  const limit = Number(req.query.limit) || 0
-  const sort = req.query.sort == "desc" ? -1 : 1
-
   try {
-    const users = await User.find()
-      .select(["-_id"])
-      .limit(limit)
-      .sort({ id: sort })
+    const search = req.query.search ? req.query.search.split(',').join(' ') : "";
+    const fields = req.query.fields ? req.query.fields.split(',').join(' ') : "";
+    const sort = req.query.sort ? req.query.sort.split(',').join(' ') : "DESC";
 
-    return res.status(200).json({
-      status: true,
-      massege: "Hiển thị danh sách thành công",
-      users
-    });
+    const limit = +req.query.limit || 0 //số records hiển thị trên mỗi trang
+    var page = +req.query.page || 0 //trang hiện tại
+
+    const total_records = await User.countDocuments(); //tổng số records
+    const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
+
+
+    //kiểm tra page nhập âm hoặc lơn hơn tổng page
+    if (page < 0) page = 1
+    if (page > total_page) page = total_page;
+    const start = +((page - 1) * limit) || 0 //loại bỏ số phần tử trước của page hiện tại
+
+
+    //limit and skip
+    if (page && limit) {
+      let users = await User.find(
+        {
+          $or: [
+            // “x” là bỏ qua khoảng trắng,
+            // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
+            { username: { $regex: search, $options: "xi" } },
+            {
+              email: { $regex: search, $options: "xi" }
+            },
+          ],
+        }
+      )
+        .select(fields)
+        .sort({ id: sort })
+        .skip(start)
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        users
+      });
+    } else {
+      let users = await User.find(
+        {
+          $or: [
+            // “x” là bỏ qua khoảng trắng,
+            // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
+            { username: { $regex: search, $options: "xi" } },
+            {
+              email: { $regex: search, $options: "xi" }
+            },
+          ],
+        }
+      )
+        .select(fields)
+        .sort({ id: sort })
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        users
+      });
+    }
+
 
   } catch (error) {
     console.log(error)

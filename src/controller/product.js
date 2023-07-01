@@ -2,19 +2,68 @@ const Product = require("../model/product");
 
 //get all,limit,sort
 module.exports.getAllProducts = async (req, res) => {
-  const limit = Number(req.query.limit) || 0;
-  const sort = req.query.sort == "desc" ? -1 : 1;
   try {
-    const product = await Product.find()
-      .select(["-_id"])
-      .limit(limit)
-      .sort({ id: sort })
+    const search = req.query.search ? req.query.search.split(',').join(' ') : "";
+    const fields = req.query.fields ? req.query.fields.split(',').join(' ') : "";
+    const sort = req.query.sort ? req.query.sort.split(',').join(' ') : "DESC";
 
-    return res.status(200).json({
-      status: true,
-      massege: "Hiển thị danh sách thành công",
-      product
-    });
+    const limit = +req.query.limit || 0 //số records hiển thị trên mỗi trang
+    var page = +req.query.page || 0 //trang hiện tại
+
+
+    const total_records = await Product.countDocuments(); //tổng số records
+    const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
+
+    //kiểm tra page nhập âm hoặc lơn hơn tổng page
+    if (page < 0) page = 1
+    if (page > total_page) page = total_page;
+    const start = +((page - 1) * limit) || 0 //loại bỏ số phần tử trước của page hiện tại
+
+    //limit and skip
+    if (page && limit) {
+      // product = product
+      let products = await Product.find(
+        {
+          $or: [
+            // “x” là bỏ qua khoảng trắng,
+            // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
+            {
+              title: { $regex: search, $options: "xi" },
+            },
+          ],
+        }
+      )
+        .select(fields)
+        .sort({ id: sort })
+        .skip(start)
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        products
+      });
+
+    } else {
+      let products = await Product.find({})
+        .select(fields)
+        .sort({ id: sort })
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        products
+      });
+    }
 
   } catch (error) {
     console.log(error)
@@ -54,22 +103,57 @@ module.exports.getProductCategories = async (req, res) => {
 
 //get products thuộc category
 module.exports.getProductsInCategory = async (req, res) => {
-  const category = req.params.category;
-  const limit = Number(req.query.limit) || 0;
-  const sort = req.query.sort == "desc" ? -1 : 1;
-
   try {
-    const products = await Product.find({ category, })
-      .select(["-_id"])
-      .sort({ id: sort })
-      // .skip(skip)
-      .limit(limit)
+    const category = req.params.category;
+    const fields = req.query.fields ? req.query.fields.split(',').join(' ') : "";
+    const sort = req.query.sort ? req.query.sort.split(',').join(' ') : "DESC";
 
-    return res.status(200).json({
-      status: true,
-      massege: "Hiển thị danh sách thành công",
-      products
-    });
+    const limit = +req.query.limit || 0 //số records hiển thị trên mỗi trang
+    var page = +req.query.page || 0 //trang hiện tại
+
+
+    // Nếu không có page và limit
+    let productCategory = await Product.find({ category })
+      .select(fields)
+      .sort({ id: sort })
+      .limit(limit)
+    const total_records = await productCategory.length; //tổng số records
+    const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
+
+    //kiểm tra page nhập âm hoặc lơn hơn tổng page
+    if (page < 0) page = 1
+    if (page > total_page) page = total_page;
+    const start = +((page - 1) * limit) || 0 //loại bỏ số phần tử trước của page hiện tại
+
+    //limit and skip
+    if (page && limit) {
+      let products = await Product.find({ category })
+        .select(fields)
+        .sort({ id: sort })
+        .skip(start)
+        .limit(limit)
+
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        products
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        massege: "Hiển thị danh sách thành công",
+        limit, // số records hiển thị trên mỗi trang 
+        page, // page hiện tại
+        total_records, //tổng số records
+        total_page, // tổng số các page
+        products: await productCategory
+      });
+    }
+
   } catch (error) {
     console.log(error)
   }
