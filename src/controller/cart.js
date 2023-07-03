@@ -12,7 +12,7 @@ module.exports.getAllCarts = async (req, res) => {
     var page = +req.query.page || 0 //trang hiện tại
 
 
-    const total_records = await Cart.countDocuments(); //tổng số records
+    const total_records = await Cart.find({ date: { $gte: new Date(startDate), $lt: new Date(endDate) } }).countDocuments(); //tổng số records
     const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
 
     //kiểm tra page nhập âm hoặc lơn hơn tổng page

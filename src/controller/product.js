@@ -4,6 +4,7 @@ const Product = require("../model/product");
 module.exports.getAllProducts = async (req, res) => {
   try {
     const search = req.query.search ? req.query.search.split(',').join(' ') : "";
+    const filter = req.query.filter ? req.query.filter.split(',').join(' ') : "";
     const fields = req.query.fields ? req.query.fields.split(',').join(' ') : "";
     const sort = req.query.sort ? req.query.sort.split(',').join(' ') : "DESC";
 
@@ -11,7 +12,18 @@ module.exports.getAllProducts = async (req, res) => {
     var page = +req.query.page || 0 //trang hiện tại
 
 
-    const total_records = await Product.countDocuments(); //tổng số records
+    const total_records = await Product.find(
+      {
+        $or: [
+          // “x” là bỏ qua khoảng trắng,
+          // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
+          {
+            title: { $regex: search, $options: "xi" },
+          },
+        ],
+        category: { $regex: filter, $options: "xi" }
+      }
+    ).countDocuments(); //tổng số records
     const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
 
     //kiểm tra page nhập âm hoặc lơn hơn tổng page
@@ -31,6 +43,7 @@ module.exports.getAllProducts = async (req, res) => {
               title: { $regex: search, $options: "xi" },
             },
           ],
+          category: { $regex: filter, $options: "xi" }
         }
       )
         .select(fields)
@@ -49,7 +62,18 @@ module.exports.getAllProducts = async (req, res) => {
       });
 
     } else {
-      let products = await Product.find({})
+      let products = await Product.find(
+        {
+          $or: [
+            // “x” là bỏ qua khoảng trắng,
+            // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
+            {
+              title: { $regex: search, $options: "xi" },
+            },
+          ],
+          category: { $regex: filter, $options: "xi" }
+        }
+      )
         .select(fields)
         .sort({ id: sort })
         .limit(limit)
@@ -113,11 +137,7 @@ module.exports.getProductsInCategory = async (req, res) => {
 
 
     // Nếu không có page và limit
-    let productCategory = await Product.find({ category })
-      .select(fields)
-      .sort({ id: sort })
-	  
-    const total_records = await productCategory.length; //tổng số records
+    const total_records = await Product.find({ category }).countDocuments(); //tổng số records
     const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
 
     //kiểm tra page nhập âm hoặc lơn hơn tổng page
@@ -143,6 +163,11 @@ module.exports.getProductsInCategory = async (req, res) => {
         products
       });
     } else {
+      let products = await Product.find({ category })
+        .select(fields)
+        .sort({ id: sort })
+        .limit(limit)
+
       return res.status(200).json({
         status: true,
         massege: "Hiển thị danh sách thành công",
@@ -150,7 +175,7 @@ module.exports.getProductsInCategory = async (req, res) => {
         page, // page hiện tại
         total_records, //tổng số records
         total_page, // tổng số các page
-        products: await productCategory
+        products
       });
     }
 

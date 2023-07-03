@@ -10,7 +10,14 @@ module.exports.getAllUser = async (req, res) => {
     const limit = +req.query.limit || 0 //số records hiển thị trên mỗi trang
     var page = +req.query.page || 0 //trang hiện tại
 
-    const total_records = await User.countDocuments(); //tổng số records
+    const total_records = await User.find(
+      {
+        $or: [
+          { username: { $regex: search, $options: "xi" } },
+          { email: { $regex: search, $options: "xi" } },
+        ],
+      }
+    ).countDocuments(); //tổng số records
     const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
 
 
@@ -28,9 +35,7 @@ module.exports.getAllUser = async (req, res) => {
             // “x” là bỏ qua khoảng trắng,
             // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
             { username: { $regex: search, $options: "xi" } },
-            {
-              email: { $regex: search, $options: "xi" }
-            },
+            { email: { $regex: search, $options: "xi" } },
           ],
         }
       )
@@ -55,9 +60,7 @@ module.exports.getAllUser = async (req, res) => {
             // “x” là bỏ qua khoảng trắng,
             // “i” là làm cho nó không phân biệt chữ hoa chữ thường, v.v.
             { username: { $regex: search, $options: "xi" } },
-            {
-              email: { $regex: search, $options: "xi" }
-            },
+            { email: { $regex: search, $options: "xi" } },
           ],
         }
       )
