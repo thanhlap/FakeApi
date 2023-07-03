@@ -116,7 +116,7 @@ module.exports.getProductsInCategory = async (req, res) => {
     let productCategory = await Product.find({ category })
       .select(fields)
       .sort({ id: sort })
-      .limit(limit)
+	  
     const total_records = await productCategory.length; //tổng số records
     const total_page = limit != 0 ? Math.ceil(total_records / limit) : 0; // tổng số trang
 
