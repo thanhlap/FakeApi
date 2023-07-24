@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon src/server.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seeder": "nodemon src/model/seeder.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +22,8 @@
     "mongoose": "^5.9.6",
     "nodemon": "^2.0.22",
     "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0"
   }
 }

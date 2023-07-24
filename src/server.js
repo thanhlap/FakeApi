@@ -5,10 +5,9 @@ const viewEngine = require("./config/viewEngine");
 const initWebRoutes = require("./routes/web");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const dotenv = require('dotenv');
 dotenv.config();
-
+const databaseConnection = require('./config/connection');
 
 
 //middleware
@@ -26,13 +25,8 @@ app.get("*", (req, res) => {
   res.send("Nhập Sai Đường Dẫn! Vui Lòng Nhập Lại >.<")
 });
 
-
 //kết nối đb
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Kết nối database thành công!"))
-  .catch((err) => {
-    console.log(err);
-  });
+databaseConnection();
 
 const PORT = process.env.PORT || 6400
 app.listen(PORT, () => {
