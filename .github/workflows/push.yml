@@ -21,7 +21,7 @@ jobs:
       - name: docker build
         uses: actions/docker/cli@master
         with:
-          args: build -t abhinavdhasmana/github-action-example-node .
+          args: build -t thanhlap/FakeApi .
       - name: docker login
         uses: actions/docker/login@master
         env:
