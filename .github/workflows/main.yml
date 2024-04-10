@@ -47,14 +47,32 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   # Deploy jobs render.com
-  deploy:
-    name: Deploy
+  deploy-sender:
+    name: Deploy-Sender
     needs: [build] # Our build must pass in order to run the deploy job
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to production
+      - name: Deploy to Sender
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
           service-id: ${{ secrets.RENDER_ID }} # Can be found as part of the Deploy Hook
           api-key: ${{ secrets.RENDER_API_KEY }} # Create your API key in Render Dashboard > Account Settings
+
+  # Deploy jobs netlify
+  deploy-netlify:
+    name: Deploy-Netlify
+    needs: [build] # Our build must pass in order to run the deploy job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Netlify
+        run: npm install netlify-cli@17.10.1 -g
+
+      - name: Deploy to Netlify
+        id: netlify_deploy
+        run: |
+          netlify deploy \
+            --dir \
+            --site ${{ secrets.NETLIFY_SITE_ID }} \
+            --auth ${{ secrets.NETLIFY_API_TOKEN }}
