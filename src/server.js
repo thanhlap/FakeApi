@@ -17,6 +17,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Page Home
+app.get("/", (req, res) => {
+  res.send('SERVER ON')
+})
+
+
 //view engine
 // viewEngine(app);
 //routes
