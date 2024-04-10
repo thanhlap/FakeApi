@@ -61,6 +61,7 @@ jobs:
 
   # Deploy jobs netlify
   deploy-netlify:
+    needs: [build] # Our build must pass in order to run the deploy job
     runs-on: ubuntu-latest
 
     steps:
@@ -76,6 +77,7 @@ jobs:
             --auth ${{ secrets.NETLIFY_API_TOKEN }}
 
   Deploy-Production:
+    needs: [build] # Our build must pass in order to run the deploy job
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
