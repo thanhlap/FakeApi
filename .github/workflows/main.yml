@@ -6,7 +6,7 @@ on:
   push:
     branches: ["main"]
   #pull_request:
-   # branches: ["main"]
+  # branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -16,7 +16,6 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    name: Build
     runs-on: ubuntu-latest
 
     strategy:
