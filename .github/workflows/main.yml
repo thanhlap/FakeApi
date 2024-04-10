@@ -24,7 +24,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
+      - name: Repository Checkout
         uses: actions/checkout@v3 # was "v2" before
         with:
           fetch-depth: 0
@@ -34,11 +34,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: NPM install, build and test
-        run: |
-          npm install
-          npm run 
-          npm test
+      - name: NPM Install Dependencies
+        run: npm install
+
+      - name: NPM build
+        run: npm run
+
+      - name: NPM build
+        run: npm test
+
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
