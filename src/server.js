@@ -22,6 +22,13 @@ app.use(bodyParser.json());
 //routes
 initWebRoutes(app);
 
+// Page Home
+app.get("/", (req, res) => {
+  res.send('SERVER ON')
+})
+
+
+
 // Page Error
 app.get("*", (req, res) => {
   res.send("Nhập Sai Đường Dẫn! Vui Lòng Nhập Lại >.<")
