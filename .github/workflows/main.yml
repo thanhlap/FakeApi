@@ -59,34 +59,34 @@ jobs:
           service-id: ${{ secrets.RENDER_ID }} # Can be found as part of the Deploy Hook
           api-key: ${{ secrets.RENDER_API_KEY }} # Create your API key in Render Dashboard > Account Settings
 
-  # Deploy jobs netlify
-  deploy-netlify:
-    needs: [build] # Our build must pass in order to run the deploy job
-    runs-on: ubuntu-latest
+  # # Deploy jobs netlify
+  # deploy-netlify:
+  #   needs: [build] # Our build must pass in order to run the deploy job
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Install Netlify
-        run: npm install netlify-cli@17.10.1 -g
+  #   steps:
+  #     - name: Install Netlify
+  #       run: npm install netlify-cli@17.10.1 -g
 
-      - name: Deploy to Netlify
-        id: netlify_deploy
-        run: |
-          netlify deploy \
-            --dir \
-            --site ${{ secrets.NETLIFY_SITE_ID }} \
-            --auth ${{ secrets.NETLIFY_API_TOKEN }}
+  #     - name: Deploy to Netlify
+  #       id: netlify_deploy
+  #       run: |
+  #         netlify deploy \
+  #           --dir \
+  #           --site ${{ secrets.NETLIFY_SITE_ID }} \
+  #           --auth ${{ secrets.NETLIFY_API_TOKEN }}
 
-  # Deploy jobs vecel
-  deploy-vecel:
-    needs: [build] # Our build must pass in order to run the deploy job
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+  # # Deploy jobs vecel
+  # deploy-vecel:
+  #   needs: [build] # Our build must pass in order to run the deploy job
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Install Vercel CLI
+  #       run: npm install --global vercel@latest
+  #     - name: Pull Vercel Environment Information
+  #       run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+  #     - name: Build Project Artifacts
+  #       run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+  #     - name: Deploy Project Artifacts to Vercel
+  #       run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
