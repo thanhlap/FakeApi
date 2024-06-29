@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
-const { seedUsers, seedProducts, seedCarts } = require("../model/seeder");
+const { seedUsers, seedProducts, seedCarts } = require("../seeders/seeder");
 
 module.exports = async () => {
     try {

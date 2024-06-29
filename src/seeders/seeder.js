@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker');
-const User = require('./user')
-const Product = require("./product");
-const Cart = require('./cart')
+const User = require('../models/user')
+const Product = require("../models/product");
+const Cart = require('../models/cart')
 
 const seedUsers = async () => {
     try {

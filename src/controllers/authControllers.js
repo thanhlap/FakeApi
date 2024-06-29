@@ -1,4 +1,4 @@
-const User = require("../model/user");
+const User = require("../models/user");
 
 module.exports.login = async (req, res) => {
   const { username, password } = req.body;

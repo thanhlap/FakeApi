@@ -1,4 +1,4 @@
-const Cart = require('../model/cart')
+const Cart = require('../models/cart')
 
 //Get all carts,Limit results,Sort results,Get carts in a date range
 module.exports.getAllCarts = async (req, res) => {

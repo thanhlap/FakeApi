@@ -2,8 +2,8 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-// const viewEngine = require("./config/viewEngine");
-const initWebRoutes = require("./routes/web");
+const viewEngine = require("./config/viewEngine");
+const initWebRoutes = require("./routes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require('dotenv');
@@ -17,14 +17,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Page Home
-app.get("/", (req, res) => {
-  res.send('SERVER ON')
-})
 
-
-//view engine
-// viewEngine(app);
+// view engine
+viewEngine(app);
 //routes
 initWebRoutes(app);
 

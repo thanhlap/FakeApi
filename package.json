@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "seeder": "nodemon src/model/seeder.js"
+    "start": "nodemon --exec babel-node src/server.js",
+    "seeder": "nodemon --exec babel-node src/seeders/seeder.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,10 +19,13 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.6",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22",
     "supertest": "^4.0.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0"
+    "@babel/core": "^7.24.7",
+    "@babel/node": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@faker-js/faker": "^7.6.0",
+    "nodemon": "^2.0.22"
   }
 }
